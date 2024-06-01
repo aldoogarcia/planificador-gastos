@@ -72,4 +72,15 @@ header h1{
   border-radius: 1.5rem;
   padding: 5rem;
 }
+.alerta{
+  padding: 1rem;
+  font-weight: 900px;
+  text-transform: uppercase;
+  font-size: 1.6rem;
+  text-align:center;
+  background-color: var(--blanco);
+  border-left: .5rem solid #b91c1c;
+  color: #b91c1c;
+
+}
 </style>

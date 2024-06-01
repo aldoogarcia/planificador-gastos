@@ -1,23 +1,92 @@
 <script setup>
+import {ref} from 'vue'
+import alertaItem from '../alerta-item.vue';
+
+const mensaje=ref('')
+const numero =ref()
+const validarPresupuesto=()=>{
+    if(numero.value<=0 ){
+        console.log("invalido")
+        console.log(mensaje)
+        mensaje.value="El presupuesto no puede ser negativo o cero"
+        numero.value=null
+        setTimeout(()=>{
+            mensaje.value='';
+        },3000)
+        
+    }
+}
+
+
+
 
 </script>
 
 <template>
-    <form>
-        <div>
-            <label for="define-presupuesto">Define presupuesto</label>
-            <input type="text"
-                id="define-presupuesto"
-                class="define-presupuesto"
+
+<div v-if="mensaje" class="alerta">
+      <alertaItem>
+        {{ mensaje }}
+      </alertaItem>
+  
+  </div>
+
+
+    <form class="presupuesto" @submit.prevent="validarPresupuesto">
+        <div class="campo">
+            <label for="nuevo-presupuesto">Nuevo presupuesto</label>
+            <input type="number"
+                id="nuevo-presupuesto"
+                class="nuevo-presupuesto"
                 placeholder="Ingresa tu Presupuesto"
+                v-model="numero"
             >
         </div>
-        <input type="submit" value="Enviar" name="" id="">
+        <input type="submit" value="Definir Presupuesto" name="" id="">
     </form>
 </template>
 
 
 
 <style  scoped>
+    .presupuesto{
+        width: 100%;
 
+    }
+    .campo{
+        display: grid;
+        gap: 2rem;
+    }
+    .presupuesto input[type="number"]{
+        background-color: var(--gris-claro);
+        border-radius: 1rem;
+        padding: 1rem;
+        border: none;
+        font-size: 2.2rem;
+        text-align: center;
+
+    }
+
+    .presupuesto input[type="submit"] {
+        background-color: var(--azul);
+        border-radius: 1rem;
+        padding: 1rem;
+        border: none;
+        font-size: 2rem;
+        text-align: center;
+        margin-top: 2rem;
+        color: var(--blanco);
+        font-weight: 900;
+        width: 100%;
+        transition: background-color 200ms linear; 
+    }
+    .presupuesto input[type="submit"]:hover{
+        background-color: #1048a4;
+        cursor: pointer;
+    }
+    .presupuesto label{
+        font-size: 2.3rem;
+        text-align: center;
+        color:var(--azul)
+    }
 </style>
