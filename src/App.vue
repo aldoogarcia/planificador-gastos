@@ -1,47 +1,75 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import presupuestoItem from './components/icons/presupuesto-item.vue';
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+<header>
+  <h1>Planificador de Gastos</h1>
+  <div class="contenedor-header contenedor sombra">
+    <presupuestoItem/>
+  </div>
+</header>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
+<style>
+:root{
+  --azul:#3b82f6;
+  --blanco:#fff;
+  --gris-claro:#f5f5f5;
+  --gris:#94a3b8;
+  --gris-obscuro:#64748b;
+  --negro: #000;
+}
+html{
+  font-size: 62.5%;
+  box-sizing: border-box;
+
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+*,
+*:before,
+*:after{
+
+  box-sizing: inherit;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+body{
+  font-size: 1.6rem;
+  font-family: 'Lato','sans-serif';
+  background-color: var(--gris-claro);
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+}
+h1{
+  font-size: 4rem;
+}
+h2{
+  font-size: 3rem;
+}
+header{
+  background-color: var(--azul);
+}
+header h1{
+  padding:3rem 0;
+  margin: 0;
+  color: var(--blanco);
+  text-align: center;
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.contenedor{
+  width: 90%;
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+.contenedor-header{
+  margin-top: -5rem;
+  transform: translateY(5rem);
+  padding: 5rem;
+}
+.sombra{
+  box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
+  background-color: var(--blanco);
+  border-radius: 1.5rem;
+  padding: 5rem;
 }
 </style>
