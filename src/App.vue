@@ -1,11 +1,22 @@
 <script setup>
-import {ref} from 'vue'
+import {ref,reactive} from 'vue'
 import presupuestoItem from './components/icons/presupuesto-item.vue';
 import controlPresupuestoItem from './components/controlPresupuesto-item.vue';
+import iconAgregarGasto from './assets/img/nuevo-gasto.svg';
+import modalItem from './components/modal-item.vue'
 
+const modal=reactive({
+  muestra:false,
+  animacion:false
+})
 const presupuesto=ref(0);
+const disponible=ref(0);
 const definirPresupuesto=(cantidad)=>{
   presupuesto.value = cantidad;
+}
+
+const cambiaModal=()=>{
+  modal.muestra=true
 }
 </script>
 
@@ -14,14 +25,28 @@ const definirPresupuesto=(cantidad)=>{
   <h1>Planificador de Gastos</h1>
   <div class="contenedor-header contenedor sombra">
     <presupuestoItem
-    v-if="presupuesto===0"
+    v-if="presupuesto<=0"
     @definir-presupuesto="definirPresupuesto"
     />
-    <controlPresupuestoItem v-else>
 
-    </controlPresupuestoItem>
+    <controlPresupuestoItem 
+    v-else
+    :presupuesto="presupuesto"
+    :disponible="disponible"/>
   </div>
 </header>
+
+
+<main v-if="presupuesto>0">
+  <div class="crear-gasto">
+    <img @click="cambiaModal" :src="iconAgregarGasto" alt="Icon Agregar Gasto">
+  </div>
+</main>
+
+<div v-if="modal.muestra" class="modal">
+  <modalItem/>
+</div>
+
 </template>
 
 <style>
@@ -96,4 +121,16 @@ header h1{
   color: #b91c1c;
 
 }
+
+.crear-gasto{
+  position: absolute;
+  bottom: 5rem;
+  right: 5rem;
+}
+.crear-gasto img{
+  width: 5rem;
+  cursor: pointer;
+}
+
+
 </style>
