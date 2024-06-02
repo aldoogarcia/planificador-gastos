@@ -4,6 +4,8 @@ import alertaItem from '../alerta-item.vue';
 
 const mensaje=ref('')
 const numero =ref()
+
+const emit= defineEmits(['definir-presupuesto'])
 const validarPresupuesto=()=>{
     if(numero.value<=0 ){
         console.log("invalido")
@@ -13,8 +15,9 @@ const validarPresupuesto=()=>{
         setTimeout(()=>{
             mensaje.value='';
         },3000)
-        
     }
+
+    emit('definir-presupuesto',numero.value)
 }
 
 
