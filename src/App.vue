@@ -62,6 +62,7 @@ const guardarGasto= ()=>{
 
 <!-- template -->
 <template>
+  <div :class="{fijar:modal.muestra }">
 <header>
   <h1>Planificador de Gastos</h1>
   <div class="contenedor-header contenedor sombra">
@@ -105,7 +106,7 @@ const guardarGasto= ()=>{
   v-model:categoria="gasto.categoria"
   />
 </div>
-
+</div>
 </template>
 
 <style>
@@ -197,5 +198,9 @@ header h1{
 .listado-gastos h2{
   font-weight: 900;
   color: var(--gris-obscuro);
+}
+.fijar{
+  overflow: hidden;
+  height: 100vh;
 }
 </style>

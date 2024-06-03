@@ -96,7 +96,7 @@
                     <option value="ahorro">Ahorro</option>
                     <option value="comida">Comida</option>
                     <option value="casa">Casa</option>
-                    <option value="Otros-gastos">Otros Gastos</option>
+                    <option value="gastos">Otros Gastos</option>
                     <option value="ocio">Ocio</option>
                     <option value="novia">Novia</option>
                     <option value="plataformas">Plataformas</option>
