@@ -3,13 +3,13 @@ import {ref} from 'vue'
 import alertaItem from '../alerta-item.vue';
 
 const mensaje=ref('')
-const numero =ref()
+const numero =ref(0)
 
 const emit= defineEmits(['definir-presupuesto'])
 const validarPresupuesto=()=>{
-    if(numero.value<=0 ){
-        console.log("invalido")
-        console.log(mensaje)
+    if(numero.value<=0 || numero.value===null){
+        // console.log("invalido")
+        // console.log(mensaje)
         mensaje.value="El presupuesto no puede ser negativo o cero"
         numero.value=null
         setTimeout(()=>{

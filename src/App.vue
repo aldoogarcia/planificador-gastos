@@ -4,6 +4,8 @@ import presupuestoItem from './components/icons/presupuesto-item.vue';
 import controlPresupuestoItem from './components/controlPresupuesto-item.vue';
 import iconAgregarGasto from './assets/img/nuevo-gasto.svg';
 import modalItem from './components/modal-item.vue'
+import gastoItem from './components/gasto-item.vue'
+import {generarId} from './helpers'
 
 const modal=reactive({
   muestra:false,
@@ -11,15 +13,54 @@ const modal=reactive({
 })
 const presupuesto=ref(0);
 const disponible=ref(0);
+const gasto=reactive({
+  nombre:'',
+  cantidad:'',
+  categoria:'',
+  id:null,
+  fecha:Date.now()
+})
+
+const gastos=ref([])
+
 const definirPresupuesto=(cantidad)=>{
   presupuesto.value = cantidad;
 }
 
 const cambiaModal=()=>{
   modal.muestra=true
+  setTimeout(()=>{
+    modal.animacion=true;
+  },300)
+  
+}
+
+const cerrarModal=()=>{
+  modal.animacion=false;
+  setTimeout(()=>{
+    modal.muestra=false;
+  },300) 
+}
+
+const guardarGasto= ()=>{
+  gastos.value.push({
+    ...gasto,
+    id:generarId(),
+  })
+  // console.log(gastos.value);
+  cerrarModal();
+  Object.assign(gasto,{
+    nombre:'',
+    cantidad:'',
+    categoria:'',
+    id:null,
+    fecha:Date.now()
+  })
+
 }
 </script>
 
+<!-- template -->
 <template>
 <header>
   <h1>Planificador de Gastos</h1>
@@ -38,13 +79,31 @@ const cambiaModal=()=>{
 
 
 <main v-if="presupuesto>0">
+
+  <div class="listado-gastos contenedor">
+    <h2>{{ gastos.length>0?'Gastos':'No hay gastos' }}</h2>
+
+    <gastoItem
+      v-for="gasto in gastos"
+      :key="gasto.id"
+      :gasto="gasto"
+    />
+  </div>
+
   <div class="crear-gasto">
     <img @click="cambiaModal" :src="iconAgregarGasto" alt="Icon Agregar Gasto">
   </div>
 </main>
 
 <div v-if="modal.muestra" class="modal">
-  <modalItem/>
+  <modalItem
+  @cerrar-modal="cerrarModal"
+  @guardar-gasto="guardarGasto"
+  :modal="modal"
+  v-model:nombre="gasto.nombre"
+  v-model:cantidad="gasto.cantidad"
+  v-model:categoria="gasto.categoria"
+  />
 </div>
 
 </template>
@@ -132,5 +191,11 @@ header h1{
   cursor: pointer;
 }
 
-
+.listado-gastos{
+  margin-top: 15rem;
+}
+.listado-gastos h2{
+  font-weight: 900;
+  color: var(--gris-obscuro);
+}
 </style>
