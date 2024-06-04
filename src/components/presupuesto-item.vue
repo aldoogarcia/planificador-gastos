@@ -1,6 +1,6 @@
 <script setup>
 import {ref} from 'vue'
-import alertaItem from '../alerta-item.vue';
+import alertaItem from './alerta-item.vue';
 
 const mensaje=ref('')
 const numero =ref(0)

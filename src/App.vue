@@ -1,6 +1,6 @@
 <script setup>
-import {ref,reactive} from 'vue'
-import presupuestoItem from './components/icons/presupuesto-item.vue';
+import {ref,reactive, watch} from 'vue'
+import presupuestoItem from './components/presupuesto-item.vue';
 import controlPresupuestoItem from './components/controlPresupuesto-item.vue';
 import iconAgregarGasto from './assets/img/nuevo-gasto.svg';
 import modalItem from './components/modal-item.vue'
@@ -13,6 +13,8 @@ const modal=reactive({
 })
 const presupuesto=ref(0);
 const disponible=ref(0);
+const gastado=ref(0);
+
 const gasto=reactive({
   nombre:'',
   cantidad:'',
@@ -21,10 +23,31 @@ const gasto=reactive({
   fecha:Date.now()
 })
 
+
+
 const gastos=ref([])
+
+watch(gastos,()=>{
+  const totalGastado=gastos.value.reduce((total,gasto)=> total +gasto.cantidad,0);
+  gastado.value=totalGastado
+
+    disponible.value=presupuesto.value-gastado.value
+
+},
+  {deep:true}
+)
+
+watch(modal,()=>{
+  if(!modal.muestra){
+    reiniciarStateGasto();
+  }
+})
+
+  
 
 const definirPresupuesto=(cantidad)=>{
   presupuesto.value = cantidad;
+  disponible.value=cantidad;
 }
 
 const cambiaModal=()=>{
@@ -43,12 +66,34 @@ const cerrarModal=()=>{
 }
 
 const guardarGasto= ()=>{
-  gastos.value.push({
+
+  if(gasto.id){
+    const {id}=gasto
+    const i =gastos.value.findIndex(variable =>variable.id==id)
+    gastos.value[i]= {...gasto}
+
+  }else{
+    gastos.value.push({
     ...gasto,
     id:generarId(),
   })
+  }
+
   // console.log(gastos.value);
   cerrarModal();
+  reiniciarStateGasto();
+
+}
+
+const elegirNombre=(id)=>{
+//   const i =gastos.value.findIndex(ga => ga.id===id);
+//   console.log(id)
+  const slect = gastos.value.find(selector => selector.id===id)
+  Object.assign(gasto,slect)
+  cambiaModal()
+}
+
+const reiniciarStateGasto=()=>{
   Object.assign(gasto,{
     nombre:'',
     cantidad:'',
@@ -56,8 +101,8 @@ const guardarGasto= ()=>{
     id:null,
     fecha:Date.now()
   })
-
 }
+
 </script>
 
 <!-- template -->
@@ -74,7 +119,8 @@ const guardarGasto= ()=>{
     <controlPresupuestoItem 
     v-else
     :presupuesto="presupuesto"
-    :disponible="disponible"/>
+    :disponible="disponible"
+    :gastado="gastado"/>
   </div>
 </header>
 
@@ -88,6 +134,8 @@ const guardarGasto= ()=>{
       v-for="gasto in gastos"
       :key="gasto.id"
       :gasto="gasto"
+      @elegir-nombre="elegirNombre"
+      
     />
   </div>
 
@@ -104,6 +152,8 @@ const guardarGasto= ()=>{
   v-model:nombre="gasto.nombre"
   v-model:cantidad="gasto.cantidad"
   v-model:categoria="gasto.categoria"
+  :disponible="disponible"
+  :gastado="gastado"
   />
 </div>
 </div>

@@ -23,6 +23,14 @@
         categoria:{
             type:String,
             required:true,
+        },
+        disponible:{
+            type:Number,
+            required:true,
+        },
+        gastado:{
+            type:Number,
+            required:true,
         }
     })
 
@@ -38,6 +46,14 @@
         }
         if(cantidad<=0){
             error.value='La cantidad debe ser mayor a 0'
+            // console.log(error)
+            setTimeout(() => {
+                error.value='';
+            },3000);
+            return
+        }
+        if(props.cantidad>props.disponible){
+            error.value='Sobrepasa el disponible'
             // console.log(error)
             setTimeout(() => {
                 error.value='';
