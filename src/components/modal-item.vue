@@ -6,7 +6,8 @@
 
 
     const error=ref('')
-   const emit= defineEmits(['cerrar-modal','guardar-gasto','update:nombre','update:cantidad','update:categoria'])
+   const emit= defineEmits(['cerrar-modal','guardar-gasto','update:nombre','update:cantidad','update:categoria',
+   'eliminar-gasto'])
     const props= defineProps({
         modal:{
             type:Object,
@@ -31,11 +32,22 @@
         gastado:{
             type:Number,
             required:true,
+        },
+        id:{
+            type : [String,null],
+            required:true,
         }
     })
 
+    const cantidadOld=props.cantidad
+    const mensajeSubmit=ref("Enviar")
+
+    if(props.id){
+        mensajeSubmit.value="Guardar Cambios"
+    }
+
     const validarGasto= ()=>{
-        const {nombre,cantidad,categoria} = props
+        const {nombre,cantidad,categoria,disponible} = props
         if([nombre,cantidad,categoria].includes('')){
             error.value='Todos los campos son obligatorios'
             //  console.log(error)
@@ -52,7 +64,17 @@
             },3000);
             return
         }
-        if(props.cantidad>props.disponible){
+        if(props.id){
+            if(cantidad>cantidadOld+disponible){
+                error.value='Sobrepasa'
+            // console.log(error)
+            setTimeout(() => {
+                error.value='';
+            },3000);
+            return
+            }
+        }else{
+            if(cantidad>disponible){
             error.value='Sobrepasa el disponible'
             // console.log(error)
             setTimeout(() => {
@@ -60,6 +82,9 @@
             },3000);
             return
         }
+
+        }
+
 
         emit('guardar-gasto',cantidad)
         
@@ -81,7 +106,7 @@
         <form class="agregar-gasto"
             @submit.prevent="validarGasto"
         >
-            <legend>Añadir Gasto</legend>
+            <legend>{{ props.id ? "Actualizar Cambios":"Añadir Gasto" }}</legend>
 
             <div v-if="error" class="alerta">
             <alertaItem >
@@ -118,10 +143,22 @@
                     <option value="plataformas">Plataformas</option>
                 </select>
             </div>
-            <input type="submit">
+            <input :value="mensajeSubmit" type="submit">
+
+            <div v-if="props.id">
+                <button
+        type="button"
+        class="btn-eliminar"
+        @click="$emit('eliminar-gasto')"
+        >
+            Eliminar
+        </button>
+            </div>
         </form>
+        
     </div>
     </div>
+
 
 
 </template>
@@ -177,7 +214,8 @@
 
 .agregar-gasto input[type="submit"]{
 background-color: var(--azul);
-color: var(--blanco)
+color: var(--blanco);
+cursor: pointer;
 }
 
 .agregar-gasto legend{
@@ -211,5 +249,17 @@ color: var(--blanco)
   border-left: .5rem solid #b91c1c;
   color: #b91c1c;
 
+}
+
+.btn-eliminar{
+    border:none;
+    padding: 1rem;
+    width: 100%;
+    background-color: #ef4444;
+    font-weight: 900;
+    font-size: 2rem;
+    color: var(--blanco);
+    margin-top:1rem;
+    cursor: pointer;
 }
 </style>
